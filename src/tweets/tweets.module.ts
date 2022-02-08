@@ -4,9 +4,14 @@ import { TweetsController } from './tweets.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Tweet } from './entities/tweet.entity';
 import { TweetsCountService } from './tweets-count/tweets-count.service';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
-  imports: [CacheModule.register(), SequelizeModule.forFeature([Tweet])],
+  imports: [
+    BullModule.registerQueue({ name: 'emails' }),
+    CacheModule.register(),
+    SequelizeModule.forFeature([Tweet]),
+  ],
   controllers: [TweetsController],
   providers: [TweetsService, TweetsCountService],
 })
